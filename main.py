@@ -1,4 +1,4 @@
-from teleClient import TelegramBotClient
+from Bots.teleClient import TelegramBotClient
 from imageGenerationsApi import ImageGenerationAPI
 from config import Config
 

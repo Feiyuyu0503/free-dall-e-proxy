@@ -1,4 +1,5 @@
-from teleClient import TelegramBotClient
+from Bots.bots import BotClient
+from Bots.teleClient import TelegramBotClient
 from fastapi import FastAPI, Form
 from fastapi.responses import JSONResponse
 from fastapi.responses import RedirectResponse

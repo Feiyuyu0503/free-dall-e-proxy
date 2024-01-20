@@ -1,8 +1,8 @@
+from Bots.bots import BotClient
 from telethon import TelegramClient, events
 import asyncio
-from config import Config
 
-class TelegramBotClient:
+class TelegramBotClient(BotClient):
     def __init__(self, api_id: int, api_hash: str, bot_username: str,session_name: str):
         self.client = TelegramClient(session_name, api_id, api_hash)
         self.bot_username = bot_username
