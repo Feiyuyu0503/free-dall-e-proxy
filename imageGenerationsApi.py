@@ -26,9 +26,12 @@ class ImageGenerationAPI:
     async def root(self):
         return RedirectResponse(url="/gradio")
 
-    async def create_image(self, text: str = Form(...)):
+    async def create_image(self, payload: dict):
+        text = payload["prompt"]
         image_markdown = await self.telegram_bot_client.send_message(text)
-        return JSONResponse(content={"markdown": image_markdown})
+        url = image_markdown.split("](", 1)[1][:-1]
+        revised_prompt = image_markdown.split("](", 1)[0][2:]
+        return JSONResponse(content={'url':url,'revised_prompt':revised_prompt})
     
     async def startup_event(self):
         await self.telegram_bot_client.start()
