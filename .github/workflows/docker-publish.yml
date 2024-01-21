@@ -2,7 +2,7 @@ name: Docker Build and Push
 
 on:
   push:
-    branches: [master]  # 或者你可以指定任何其他分支或标签
+    branches: [main] 
 
 jobs:
   build_and_push:
