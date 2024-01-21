@@ -3,3 +3,4 @@ backup
 flagged
 .env
 *.session
+*.session-journal
