@@ -1,0 +1,40 @@
+name: Docker Build and Push
+
+on:
+  push:
+    branches: [master]  # 或者你可以指定任何其他分支或标签
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the repo
+      uses: actions/checkout@v2
+    
+    - name: Extract version label from Dockerfile
+      id: extract_version
+      run: |
+        echo "VERSION=$(grep 'LABEL version=' Dockerfile | sed -e 's/LABEL version=//')" >> $GITHUB_ENV
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags:  |
+          feiyuyu/free-dall-e-proxy:latest
+          feiyuyu/free-dall-e-proxy:${{ env.VERSION }}
+
+    - name: Logout from Docker Hub
+      if: always()
+      run: docker logout
