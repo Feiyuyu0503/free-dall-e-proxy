@@ -10,8 +10,8 @@ class Config:
     SESSION_NAME = os.getenv('SESSION_NAME')
     FASTAPI_SERVER_URL = os.getenv('FASTAPI_SERVER_URL')
 
-    DiscordClientBotToken = os.getenv('DiscordClientBotToken')
-    DiscordChannelID = int(os.getenv('DiscordChannelID'))
-    DiscordDalleBotID = int(os.getenv('DiscordDalleBotId'))
+    DiscordClientBotToken = os.getenv('DISCORD_ClIENTBOT_TOKEN')
+    DiscordChannelID = int(os.getenv('DISCORD_CHANNEL_ID'))
+    DiscordDalleBotID = int(os.getenv('DISCORD_DALLE_BOT_ID'))
 
 config = Config()

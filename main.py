@@ -25,6 +25,7 @@ bot_clients = {
 api = ImageGenerationAPI(bot_clients)
 
 if __name__ == "__main__":
+    print(DiscordChannelID)
     try:
         import uvicorn
         uvicorn.run(app="main:api.app", host="0.0.0.0", port=8000)
