@@ -1,9 +1,9 @@
 import gradio as gr
 import requests
-from config import Config
+from config import config
 
 # FastAPI 服务器的 URL
-FASTAPI_SERVER_URL = Config.FASTAPI_SERVER_URL
+FASTAPI_SERVER_URL = config.FASTAPI_SERVER_URL
 
 def get_image_url(text):
     # 向 FastAPI 后端发送 POST 请求，并获取图片 URL

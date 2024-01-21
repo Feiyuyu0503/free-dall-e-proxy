@@ -13,3 +13,5 @@ class Config:
     DiscordClientBotToken = os.getenv('DiscordClientBotToken')
     DiscordChannelID = int(os.getenv('DiscordChannelID'))
     DiscordDalleBotID = int(os.getenv('DiscordDalleBotId'))
+
+config = Config()

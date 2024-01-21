@@ -1,16 +1,16 @@
 from Bots.teleClient import TelegramBotClient
 from Bots.discordClient import DiscordBotClient
 from imageGenerationsApi import ImageGenerationAPI
-from config import Config
+from config import config
 
-API_ID = Config.API_ID
-API_HASH = Config.API_HASH
-BOT_USERNAME = Config.BOT_USERNAME
-SESSION_NAME = Config.SESSION_NAME
+API_ID = config.API_ID
+API_HASH = config.API_HASH
+BOT_USERNAME = config.BOT_USERNAME
+SESSION_NAME = config.SESSION_NAME
 
-DiscordClientBotToken = Config.DiscordClientBotToken
-DiscordChannelID = Config.DiscordChannelID
-DiscordDalleBotId = Config.DiscordDalleBotID
+DiscordClientBotToken = config.DiscordClientBotToken
+DiscordChannelID = config.DiscordChannelID
+DiscordDalleBotId = config.DiscordDalleBotID
 
 telegram_bot_client = TelegramBotClient(API_ID, API_HASH, BOT_USERNAME, SESSION_NAME)
 discord_bot_client = DiscordBotClient(DiscordClientBotToken, DiscordChannelID,DiscordDalleBotId)
