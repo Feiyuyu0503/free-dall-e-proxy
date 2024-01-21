@@ -13,5 +13,7 @@ COPY . .
 # 安装依赖项
 RUN pip install --no-cache-dir -r requirements.txt
 
+EXPOSE 8000
+
 # 运行Python应用程序
 CMD ["python", "main.py"]
