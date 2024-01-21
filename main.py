@@ -27,6 +27,6 @@ api = ImageGenerationAPI(bot_clients)
 if __name__ == "__main__":
     try:
         import uvicorn
-        uvicorn.run(app="main:api.app", host="127.0.0.1", port=8000)
+        uvicorn.run(app="main:api.app", host="0.0.0.0", port=8000)
     except Exception as e:
         print(f"启动服务器时发生错误: {e}")
