@@ -6,8 +6,7 @@ class TelegramBotClient(BotClient):
     def __init__(self, api_id: int, api_hash: str, bot_username: str,session_name: str):
         self.client = TelegramClient(session_name, api_id, api_hash)
         self.bot_username = bot_username
-        self.response_event = asyncio.Event()
-        self.response_message = None
+        self.pending_responses = {}  # 用于存储消息 ID 和(事件,回复消息)
 
     async def start(self):
         await self.client.start()
@@ -18,12 +17,20 @@ class TelegramBotClient(BotClient):
         await self.client.disconnect()
 
     async def send_message(self, text: str):
-        await self.client.send_message(self.bot_username, text)
-        await self.response_event.wait()
-        self.response_event.clear()
-        return self.response_message
+        sent_msg = await self.client.send_message(self.bot_username, text)
+        msg_id = sent_msg.id
+         # 为这个消息创建一个新的 Event 对象
+        response_event = asyncio.Event()
+        self.pending_responses[msg_id] = (response_event, None)
+        await response_event.wait()
+        # 等待事件被触发，然后获取响应
+        response_event, response_message = self.pending_responses.pop(msg_id)
+        response_event.clear()
+        return response_message
 
     async def handle_response(self, event):
-        if event.is_private:
-            self.response_message = event.message.message
-            self.response_event.set()
+        reply_to_msg_id = event.message.reply_to_msg_id
+        if event.is_private and reply_to_msg_id in self.pending_responses:
+            response_event, _ = self.pending_responses[reply_to_msg_id]
+            self.pending_responses[reply_to_msg_id] = (response_event, event.message.message)
+            response_event.set()
