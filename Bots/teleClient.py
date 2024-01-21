@@ -1,10 +1,10 @@
 from Bots.bots import BotClient
 from telethon import TelegramClient, events
-import asyncio
+import asyncio,os
 
 class TelegramBotClient(BotClient):
     def __init__(self, api_id: int, api_hash: str, bot_username: str,session_name: str):
-        self.client = TelegramClient(session_name, api_id, api_hash)
+        self.client = TelegramClient(os.path.join('data',session_name), api_id, api_hash)
         self.bot_username = bot_username
         self.pending_responses = {}  # 用于存储消息 ID 和(事件,回复消息)
 
