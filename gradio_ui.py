@@ -19,8 +19,8 @@ def get_image_url(text):
     }
     response = requests.post(f"{FASTAPI_SERVER_URL}/v1/images/generations", json=payload)
     #print(response.json())
-    image_url = response.json()["url"]
-    prompt = response.json()["revised_prompt"]
+    image_url = response.json()["data"][0]["url"]
+    prompt = response.json()["data"][0]["revised_prompt"]
     return f"## {prompt}\n![Generated Image]({image_url})"
 
 # 创建 Gradio 界面
