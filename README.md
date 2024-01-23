@@ -1,4 +1,5 @@
 # Free DALL·E Proxy
+<img src=".github\images\demo.webp" width="50%" height="50%">
 
 ## Project Introduction
 `free-dall-e-proxy` is a project that leverages the power of bots supported by the [coze](https://www.coze.com) (currently Telegram and Discord) to provide free access to OpenAI's DALL·E 3 image generation capabilities. This proxy service offers an OpenAI-standard API endpoint, allowing developers to easily integrate DALL·E 3 into their applications.
@@ -24,7 +25,7 @@ For ease of deployment, `free-dall-e-proxy` is containerized using Docker. To de
    ```bash
    # Pull my published image
    docker pull feiyuyu/free-dall-e-proxy
-   # Alternatively,you can build the Docker image yourself using the following command:
+   # Alternatively, you can build the Docker image yourself using the following command:
    docker build -t free-dall-e-proxy .
    ```
 4. Config your data/.env file according to the prompt in file:
@@ -100,3 +101,9 @@ To generate images with DALL·E 3, send a POST request to the proxy's API endpoi
 
 ## Support
 For any questions or issues regarding the deployment or usage of `free-dall-e-proxy`, please feel free to open an issue in the GitHub repository.
+
+## Disclaimer
+
+This project is open-source and intended solely for educational purposes. It must not be used for any illegal activities.
+
+---
