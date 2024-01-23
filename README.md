@@ -1,7 +1,7 @@
 # Free DALL·E Proxy
 <img src=".github\images\demo.webp" width="50%" height="50%">
 
-## Project Introduction
+## Introduction
 `free-dall-e-proxy` is a project that leverages the power of bots supported by the [coze](https://www.coze.com) (currently Telegram and Discord) to provide free access to OpenAI's DALL·E 3 image generation capabilities. This proxy service offers an OpenAI-standard API endpoint, allowing developers to easily integrate DALL·E 3 into their applications.
 
 ## Prerequisites
@@ -28,7 +28,7 @@ For ease of deployment, `free-dall-e-proxy` is containerized using Docker. To de
    # Alternatively, you can build the Docker image yourself using the following command:
    docker build -t free-dall-e-proxy .
    ```
-4. Config your data/.env file according to the prompt in file:
+4. Configure your related credentials in the `data/.env` file according to the prompt:
    ```bash
    cp data/.env.example data/.env
    vim data/.env
@@ -58,7 +58,7 @@ If you prefer to run the proxy service directly with Python, you can follow thes
    ```bash
    pip install -r requirements.txt
    ```
-4. Set up your Coze platform bot credentials in the `.env` file.
+4. Configure your related credentials in the `data/.env` file according to the prompt
    ```bash
    cp data/.env.example data/.env
    vim data/.env
@@ -70,7 +70,7 @@ If you prefer to run the proxy service directly with Python, you can follow thes
    # or use uvicorn
    uvicorn main:api.app
    ```
-The proxy service will now be accessible on the configured port.
+The proxy service will now be accessible on the configured port(default:8000).
 
 ## Usage
 To generate images with DALL·E 3, send a POST request to the proxy's API endpoint with your image generation parameters. The proxy will handle the request, communicate with the Coze platform supported bots(like Telegram,Discord...), and return the generated image.
