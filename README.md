@@ -25,7 +25,7 @@ For ease of deployment, `free-dall-e-proxy` is containerized using Docker. To de
    ```
 4. Run the Docker container:
    ```bash
-   docker run -it -p 8000:8000 -v $PWD/data:/app/data free-dall-e-proxy
+   docker run -it -p 8000:8000 -v $PWD/data:/app/data --name free-dall-e-proxy free-dall-e-proxy
    ```
 
 The proxy service will now be running on port 8000 of your host machine.
