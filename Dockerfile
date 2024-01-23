@@ -1,5 +1,5 @@
 # 使用官方Python镜像作为基础镜像
-FROM python:3.11-alpine
+FROM python:3.9-slim
 LABEL author="feiyuyu"
 LABEL email="admin@feiyuyu.net"
 LABEL version="0.2.0"
