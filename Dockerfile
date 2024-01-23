@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 8000
 
 # 运行应用程序
-CMD ["uvicorn", "main:api.app", "--host", "0.0.0.0", "--port", "1124"]
+CMD ["uvicorn", "main:api.app", "--host", "0.0.0.0", "--port", "8000"]
