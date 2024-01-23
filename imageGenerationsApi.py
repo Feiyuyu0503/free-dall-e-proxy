@@ -9,7 +9,6 @@ import asyncio
 class ImageGenerationAPI:
     def __init__(self, bot_clients: dict):
         self.app = FastAPI()
-        # self.telegram_bot_client = telegram_bot_client
         self.bot_clients = bot_clients  # 一个包含不同机器人客户端实例的字典
         self.setup_events()
         self.mount_gradio_interface()
@@ -31,7 +30,7 @@ class ImageGenerationAPI:
 
     async def create_image(self, payload: dict):
         text = payload["prompt"]
-        platform = payload.get("platform", "telegram")  # 从payload中获取平台信息，默认为telegram
+        platform = payload.get("platform",list(self.bot_clients.keys())[0])  # 从payload中获取平台信息，默认为第一个启用的平台
         bot_client = self.bot_clients.get(platform)
         image_markdown = await bot_client.send_message(text)
         if platform == "telegram":
@@ -43,15 +42,13 @@ class ImageGenerationAPI:
         return JSONResponse(content={"data": [{"url": url, "revised_prompt": revised_prompt}]})
 
     async def startup_event(self):
-        # for bot_client in self.bot_clients.values():
-        #    await bot_client.start()
+        if not self.bot_clients:
+            raise ValueError("No bot clients found, please check your .env file.")
         await asyncio.gather(
             *(bot_client.start() for bot_client in self.bot_clients.values())
         )
 
     async def shutdown_event(self):
-        # for bot_client in self.bot_clients.values():
-        #    await bot_client.stop()
         await asyncio.gather(
             *(bot_client.stop() for bot_client in self.bot_clients.values())
         )
