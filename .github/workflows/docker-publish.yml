@@ -3,6 +3,9 @@ name: Docker Build and Push
 on:
   push:
     branches: [main] 
+    paths-ignore:
+       - README.md
+       - LICENSE
 
 jobs:
   build_and_push:
