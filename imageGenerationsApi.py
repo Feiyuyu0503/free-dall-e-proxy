@@ -4,7 +4,19 @@ from fastapi.responses import RedirectResponse
 import gradio as gr
 from gradio_ui import iface
 import asyncio
+from pydantic import BaseModel, Field
+from typing import Optional
 
+class ImageGenerationRequest(BaseModel):
+    prompt: str = Field(..., description="A text description of the desired image(s).", max_length=4000)
+    model: Optional[str] = Field("dall-e-3", description="The model to use for image generation.")
+    n: Optional[int] = Field(1, description="The number of images to generate.For dall-e-3, only n=1 is supported.", ge=1, le=10)
+    quality: Optional[str] = Field("standard", description="The quality of the image that will be generated. hd creates images with finer details and greater consistency across the image. This param is only supported for dall-e-3")
+    response_format: Optional[str] = Field("url", description="The format in which the generated images are returned.")
+    size: Optional[str] = Field("1024x1024", description="The size of the generated images. Must be one of 1024x1024, 1792x1024, or 1024x1792 for dall-e-3 models.")
+    style: Optional[str] = Field("vivid", description="The style of the generated images.Must be one of vivid or natural")
+    user: Optional[str] = Field(None, description="A unique identifier representing your end-user.")
+    platform: Optional[str] = Field(None, description="The platform which coze supported to use for image generation.")
 
 class ImageGenerationAPI:
     def __init__(self, bot_clients: dict):
@@ -28,9 +40,9 @@ class ImageGenerationAPI:
     async def root(self):
         return RedirectResponse(url="/gradio")
 
-    async def create_image(self, payload: dict):
-        text = payload["prompt"]
-        platform = payload.get("platform",list(self.bot_clients.keys())[0])  # 从payload中获取平台信息，默认为第一个启用的平台
+    async def create_image(self, payload: ImageGenerationRequest):
+        text = payload.prompt
+        platform = payload.platform or list(self.bot_clients.keys())[0]  # 从payload中获取平台信息，默认为第一个启用的平台
         bot_client = self.bot_clients.get(platform)
         image_markdown = await bot_client.send_message(text)
         if platform == "telegram":
