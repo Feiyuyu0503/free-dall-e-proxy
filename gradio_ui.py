@@ -11,11 +11,11 @@ def get_image_url(text):
         "prompt": text,
         "model": 'dall-e-3',
         "n": 1,
-        "quality": 'hd',
+        "quality": 'standard',
         "response_format": 'url',
         "size": '1024x1024',
         "style": 'vivid',
-        "user": 'tg'
+        "user": 'free-dall-e-user'
     }
     response = requests.post(f"{FASTAPI_SERVER_URL}/v1/images/generations", json=payload)
     #print(response.json())
@@ -29,10 +29,27 @@ iface = gr.Interface(
     inputs=gr.Textbox(lines=2, placeholder="Enter text here..."),
     outputs="markdown",  # 使用 markdown 组件显示图片
     title="Text to Image",
-    description="Enter some text and submit to generate an image."
+    description='''Enter some text and submit to generate an image.
+                   <div id="custom-footer">
+                       <a href="/docs" target="_blank">Api Documentation</a>
+                   </div>''',
+    allow_flagging="never",
+    css='''
+        footer {visibility: hidden}
+        #custom-footer {
+            position: fixed;
+            bottom: 10px;
+            width: 80%;
+            text-align: center;
+        }
+        #custom-footer a {
+            color: blue;
+            text-decoration: none;
+        }
+    '''
 )
 
 if __name__ == '__main__':
     # 启动 Gradio 界面
-    app,local_url,share_url = iface.launch(share=True)
+    app,local_url,share_url = iface.launch(share=False)
 
