@@ -2,7 +2,7 @@ from fastapi import FastAPI, Form
 from fastapi.responses import JSONResponse
 from fastapi.responses import RedirectResponse
 import gradio as gr
-from gradio_ui import iface
+from gradio_ui import demo
 import asyncio
 from pydantic import BaseModel, Field
 from typing import Optional
@@ -35,7 +35,7 @@ class ImageGenerationAPI:
         self.app.post("/v1/images/generations")(self.create_image)
 
     def mount_gradio_interface(self):
-        self.app = gr.mount_gradio_app(self.app, iface, "/gradio")
+        self.app = gr.mount_gradio_app(self.app, demo, "/gradio")
 
     async def root(self):
         return RedirectResponse(url="/gradio")
