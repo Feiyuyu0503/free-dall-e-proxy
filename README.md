@@ -5,7 +5,7 @@
 `free-dall-e-proxy` is a project that leverages the power of bots supported by the [coze](https://www.coze.com) (currently Telegram and Discord) to provide free access to OpenAI's DALL·E 3 image generation capabilities. This proxy service offers an OpenAI-standard API endpoint, allowing developers to easily integrate DALL·E 3 into their applications.
 
 ## Prerequisites
-Before you can start using `free-dall-e-proxy`, you need to configure agents on the [Coze platform](https://www.coze.com/docs/publish/telegram.html). These agents act as intermediaries, facilitating the communication between your application and the DALL·E 3 API through the supported bots.
+Before you can start using `free-dall-e-proxy`, you need to configure agents on the [Coze platform](https://www.coze.com/docs/publish/telegram.html). These agents act as intermediaries, facilitating the communication between your application and the DALL·E 3 API through the supported bots. More details refer to [how_to_create_coze_agent](./docs/how_to_create_coze_agent.md).
 
 ## Deployment
 
@@ -20,18 +20,17 @@ For ease of deployment, `free-dall-e-proxy` is containerized using Docker. To de
    ```bash
    cd free-dall-e-proxy
    ```
-3. Pull my published image or build the Docker image yourself:
-   
+3. Configure your related credentials in the `data/.env` file according to the prompt:
+   ```bash
+   cp data/.env.example data/.env
+   vim data/.env
+   ```
+4. Pull my published image or build the Docker image yourself:
    ```bash
    # Pull my published image
    docker pull feiyuyu/free-dall-e-proxy
    # Alternatively, you can build the Docker image yourself using the following command:
    docker build -t free-dall-e-proxy .
-   ```
-4. Configure your related credentials in the `data/.env` file according to the prompt:
-   ```bash
-   cp data/.env.example data/.env
-   vim data/.env
    ```
 5. Run the Docker container:
    ```bash
