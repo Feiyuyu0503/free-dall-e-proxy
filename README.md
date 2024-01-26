@@ -1,6 +1,7 @@
 # Free DALL·E Proxy
-<img src=".github\images\demo.webp" width="50%" height="50%">
+<img src=".github\images\demo.webp" width="50%" height="50%"><img src=".github\images\demo2.webp" width="50%" height="50%">
 
+### English · [简体中文](./README.zh-CN.md)
 ## Introduction
 `free-dall-e-proxy` is a project that leverages the power of bots supported by the [coze](https://www.coze.com) (currently Telegram and Discord) to provide free access to OpenAI's DALL·E 3 image generation capabilities. This proxy service offers an OpenAI-standard API endpoint, allowing developers to easily integrate DALL·E 3 into their applications.
 
@@ -34,10 +35,17 @@ For ease of deployment, `free-dall-e-proxy` is containerized using Docker. To de
    ```
 5. Run the Docker container:
    ```bash
+   # if you set `Telegram` to True in the data/.env, it might require to login with your phone after running following commands.
+   # after logining, you can press 'ctrl+p+q' to detach the container without stoping the container.
    # if use my published image,run:
    docker run -it -p 8000:8000 -v $PWD/data:/app/data --name free-dall-e-proxy feiyuyu/free-dall-e-proxy
    # if you build the image yourself,run:
    docker run -it -p 8000:8000 -v $PWD/data:/app/data --name free-dall-e-proxy free-dall-e-proxy
+
+   # if you only set `DISCORD` to True in the data/.env, you can run the following command instead:
+   docker run -it -d -p 8000:8000 -v $PWD/data:/app/data --name free-dall-e-proxy feiyuyu/free-dall-e-proxy
+   # or (if you build the image yourself)
+   docker run -it -d -p 8000:8000 -v $PWD/data:/app/data --name free-dall-e-proxy free-dall-e-proxy
    ```
 
 The proxy service will now be running on port 8000 of your host machine.
