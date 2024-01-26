@@ -7,6 +7,8 @@ import asyncio
 from pydantic import BaseModel, Field
 from typing import Optional
 
+default_img = 'https://raw.githubusercontent.com/Feiyuyu0503/free-dall-e-proxy/main/.github/images/sorry_cat.png'
+
 class ImageGenerationRequest(BaseModel):
     prompt: str = Field(..., description="A text description of the desired image(s).", max_length=4000)
     model: Optional[str] = Field("dall-e-3", description="The model to use for image generation.")
@@ -46,11 +48,15 @@ class ImageGenerationAPI:
         bot_client = self.bot_clients.get(platform)
         image_markdown = await bot_client.send_message(text)
         if platform == "telegram":
-            url = image_markdown.split("](", 1)[1][:-1]
-            revised_prompt = image_markdown.split("](", 1)[0][2:]
+            if image_markdown.startswith("!"):
+                url = image_markdown.split("](", 1)[1][:-1]
+                revised_prompt = image_markdown.split("](", 1)[0][2:]
+            else:
+                url = default_img
+                revised_prompt = image_markdown
         elif platform == "discord":
-            url = image_markdown
-            revised_prompt = text
+            url = image_markdown if image_markdown.startswith("https") else default_img
+            revised_prompt = "sorry, your request failed. Try other prompts or try again later."
         return JSONResponse(content={"data": [{"url": url, "revised_prompt": revised_prompt}]})
 
     async def startup_event(self):
