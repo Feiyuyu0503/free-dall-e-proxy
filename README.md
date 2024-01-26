@@ -20,7 +20,7 @@ For ease of deployment, `free-dall-e-proxy` is containerized using Docker. To de
    ```bash
    cd free-dall-e-proxy
    ```
-3. Configure your related credentials in the `data/.env` file according to the prompt:
+3. Configure your related credentials in the `data/.env` file according to the prompt, now the [docs](docs/how_to_configure.md) is here:
    ```bash
    cp data/.env.example data/.env
    vim data/.env
@@ -57,7 +57,7 @@ If you prefer to run the proxy service directly with Python, you can follow thes
    ```bash
    pip install -r requirements.txt
    ```
-4. Configure your related credentials in the `data/.env` file according to the prompt
+4. Configure your related credentials in the `data/.env` file according to the prompt, now the [docs](docs/how_to_configure.md) is here:
    ```bash
    cp data/.env.example data/.env
    vim data/.env
