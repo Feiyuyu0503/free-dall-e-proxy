@@ -53,15 +53,15 @@ class ImageGenerationAPI:
                 revised_prompt = image_markdown.split("](", 1)[0][2:]
             else:
                 url = default_img
-                revised_prompt = image_markdown
+                revised_prompt = 'Sorry, your request failed. Remember no violence and pornography(restriction of coze). Tra again later.'
         elif platform == "discord":
             url = image_markdown if image_markdown.startswith("https") else default_img
-            revised_prompt = "sorry, your request failed. Try other prompts or try again later."
+            revised_prompt = "Sorry, your request failed. Remember no violence and pornography(restriction of coze). Tra again later."
         return JSONResponse(content={"data": [{"url": url, "revised_prompt": revised_prompt}]})
 
     async def startup_event(self):
         if not self.bot_clients:
-            raise ValueError("No bot clients found, please check your .env file.")
+            raise ValueError("No bot clients found, please check your data/.env file.")
         await asyncio.gather(
             *(bot_client.start() for bot_client in self.bot_clients.values())
         )
