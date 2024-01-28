@@ -22,7 +22,7 @@ async def get_image_url(text):
     }
     async with aiohttp.ClientSession() as session:
         # 创建一个可取消的任务
-        current_task = asyncio.create_task(session.post(f"{config.FASTAPI_SERVER_URL}/v1/images/generations", json=payload))
+        current_task = asyncio.create_task(session.post(f"http://127.0.0.1:{config.PORT}/v1/images/generations", json=payload))
         try:
             # 等待任务完成
             response = await current_task

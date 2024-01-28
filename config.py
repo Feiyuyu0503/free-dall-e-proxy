@@ -1,11 +1,13 @@
 from dotenv import load_dotenv
 import os
+from loguru import logger
 
 class Config:
     load_dotenv(dotenv_path = os.path.join('data','.env'))  # Load .env file
 
-    FASTAPI_SERVER_URL = os.getenv('FASTAPI_SERVER_URL').strip('/')
-    SERVER_PORT = int(FASTAPI_SERVER_URL.split(':')[-1].strip('/'))
+    if os.getenv('FASTAPI_SERVER_URL') is not None:
+        logger.warning(f"the env 'FASTAPI_SERVER_URL' is deprecated, please set 'PORT' in your data/.env instead.(Default: PORT=8000)")
+    PORT = int(os.getenv('PORT') or 8000)
     Timeout = float((os.getenv('TIMEOUT')) or 60)
     # telegram
     TELEGRAM = os.getenv('TELEGRAM')
