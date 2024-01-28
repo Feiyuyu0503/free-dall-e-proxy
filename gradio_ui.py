@@ -1,11 +1,14 @@
 import gradio as gr
 import requests
 from config import config
+import aiohttp
+import asyncio
 
-# FastAPI 服务器的 URL
-FASTAPI_SERVER_URL = config.FASTAPI_SERVER_URL
+# 当前任务
+current_task = None
 
-def get_image_url(text):
+async def get_image_url(text):
+    global current_task
     # 向 FastAPI 后端发送 POST 请求，并获取图片 URL
     payload = {
         "prompt": text,
@@ -17,11 +20,27 @@ def get_image_url(text):
         "style": 'vivid',
         "user": 'free-dall-e-user'
     }
-    response = requests.post(f"{FASTAPI_SERVER_URL}/v1/images/generations", json=payload)
-    #print(response.json())
-    image_url = response.json()["data"][0]["url"]
-    prompt = response.json()["data"][0]["revised_prompt"]
-    return f"## {prompt}\n![Generated Image]({image_url})"
+    async with aiohttp.ClientSession() as session:
+        # 创建一个可取消的任务
+        current_task = asyncio.create_task(session.post(f"{config.FASTAPI_SERVER_URL}/v1/images/generations", json=payload))
+        try:
+            # 等待任务完成
+            response = await current_task
+            # 解析响应
+            image_url = (await response.json())["data"][0]["url"]
+            prompt = (await response.json())["data"][0]["revised_prompt"]
+            return f"### {prompt}\n![Generated Image]({image_url})"
+        except asyncio.CancelledError:
+            return "### Task was cancelled"
+        finally:
+            current_task = None
+
+# 打断上面的post请求
+def cancel():
+    global current_task
+    if current_task:
+        current_task.cancel()
+
 
 # 自定义 HTML 内容作为页脚
 footer_html = '''
@@ -57,9 +76,11 @@ with gr.Blocks(css=custom_css) as demo:
        with gr.Column():
            input_text = gr.Textbox(lines=2, placeholder="Enter text here...")
            submit_button = gr.Button("Submit")
+           cancel_button = gr.Button("Cancel")
        with gr.Column():
            output_markdown = gr.Markdown()
     submit_button.click(fn=get_image_url, inputs=input_text, outputs=output_markdown)
+    cancel_button.click(fn=cancel)
     gr.HTML(footer_html)
 
 if __name__ == '__main__':
