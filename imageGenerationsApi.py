@@ -58,6 +58,7 @@ class ImageGenerationAPI:
                 else:
                     url = default_img
                     revised_prompt = failure_msg
+                    logger.warning("Telegram client just got pure texts, no image url.")
             except Exception as e:
                     url = default_img
                     revised_prompt = "Sorry, try again."
