@@ -5,7 +5,7 @@ from loguru import logger
 class Config:
     # Load .env file
     if not load_dotenv(dotenv_path = os.path.join('data','.env')):
-        logger.error("No data/.env file found. Please make sure you are in the root directory of the project.")
+        logger.error("No data/.env file found. Please make sure you are in the root directory of the project OR you have set envs manually.")
 
     if os.getenv('FASTAPI_SERVER_URL') is not None:
         logger.warning(f"the env 'FASTAPI_SERVER_URL' is deprecated, please remove it and set 'PORT' in your data/.env instead.(Default: PORT=8000)")
@@ -18,12 +18,11 @@ class Config:
     BOT_USERNAME = os.getenv('BOT_USERNAME')
     BOT_USERNAME = BOT_USERNAME if BOT_USERNAME.startswith('@') else '@'+BOT_USERNAME
     SESSION_NAME = os.getenv('SESSION_NAME')+'.session'
+    SESSION_STRING = os.getenv('SESSION_STRING')
     # read session file if exists
-    if os.path.exists(os.path.join('data',SESSION_NAME)):
+    if os.path.exists(os.path.join('data',SESSION_NAME)) and not SESSION_STRING:
         with open(os.path.join('data',SESSION_NAME),'r') as f:
             SESSION_STRING = f.read().strip()
-    else:
-        SESSION_STRING = ""
 
     # discord
     Discord = os.getenv('DISCORD')
