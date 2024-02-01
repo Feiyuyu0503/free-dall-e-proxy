@@ -30,4 +30,7 @@ class Config:
     DiscordChannelID = int(os.getenv('DISCORD_CHANNEL_ID') or -1)
     DiscordDalleBotID = int(os.getenv('DISCORD_DALLE_BOT_ID') or -1)
 
+    # mkdir data/images if not exists
+    os.makedirs(os.path.join('data', 'images'), exist_ok=True)
+
 config = Config()

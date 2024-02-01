@@ -7,3 +7,4 @@ Telethon==1.33.1
 uvicorn==0.26.0
 aiofiles==23.2.1
 loguru==0.7.2
+cryptg==0.4.0

@@ -1,13 +1,13 @@
 import gradio as gr
-import requests
-from config import config
 import aiohttp
 import asyncio
 
 # 当前任务
 current_task = None
 
-async def get_image_url(text):
+async def get_image_url(text,request:gr.Request):
+    base_url = request.headers.get("host")
+    scheme = request.headers.get("x-forwarded-proto") or "http"
     global current_task
     # 向 FastAPI 后端发送 POST 请求，并获取图片 URL
     payload = {
@@ -22,7 +22,7 @@ async def get_image_url(text):
     }
     async with aiohttp.ClientSession() as session:
         # 创建一个可取消的任务
-        current_task = asyncio.create_task(session.post(f"http://127.0.0.1:{config.PORT}/v1/images/generations", json=payload))
+        current_task = asyncio.create_task(session.post(f"{scheme}://{base_url}/v1/images/generations", json=payload))
         try:
             # 等待任务完成
             response = await current_task
@@ -30,6 +30,7 @@ async def get_image_url(text):
             image_url = (await response.json())["data"][0]["url"]
             prompt = (await response.json())["data"][0]["revised_prompt"]
             return f"### {prompt}\n![Generated Image]({image_url})"
+            #return f"<img src=\"data:image/jpeg;base64,{image_url}\">"
         except asyncio.CancelledError:
             return "### Task was cancelled"
         finally:

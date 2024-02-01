@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Form
+from fastapi import FastAPI,Request
 from fastapi.responses import JSONResponse
 from fastapi.responses import RedirectResponse
 import gradio as gr
@@ -7,6 +7,8 @@ import asyncio
 from pydantic import BaseModel, Field
 from typing import Optional
 from loguru import logger
+from fastapi.staticfiles import StaticFiles
+import os
 
 default_img = 'https://raw.githubusercontent.com/Feiyuyu0503/free-dall-e-proxy/main/.github/images/sorry_cat.png'
 failure_msg = 'Sorry, something wrong happened. Try again. Due to the restriction of coze, remember no violence(even sword...) and pornography.'
@@ -38,23 +40,27 @@ class ImageGenerationAPI:
     def setup_routes(self):
         self.app.get("/")(self.root)
         self.app.post("/v1/images/generations")(self.create_image)
-
+        
     def mount_gradio_interface(self):
         self.app = gr.mount_gradio_app(self.app, demo, "/gradio")
+        self.app.mount("/images", StaticFiles(directory=os.path.join("data","images")), name="images")
 
     async def root(self):
         return RedirectResponse(url="/gradio")
 
-    async def create_image(self, payload: ImageGenerationRequest):
+    async def create_image(self, request: Request, payload: ImageGenerationRequest):
         text = payload.prompt
         platform = payload.platform if payload.platform in self.platforms else self.platforms[0]  # 从payload中获取平台信息，默认为第一个启用的平台
         bot_client = self.bot_clients.get(platform)
         image_markdown = await bot_client.send_message(text)
         if platform == "telegram":
             try:
-                if image_markdown.startswith("!"):
-                        url = image_markdown.split("](", 1)[1][:-1]
-                        revised_prompt = image_markdown.split("](", 1)[0][2:]
+                if image_markdown.endswith(".png"):
+                    host = request.headers.get("host")
+                    scheme = request.url.scheme
+                    path = f"/images/{image_markdown}"
+                    url = f"{scheme}://{host}{path}"
+                    revised_prompt = text
                 else:
                     url = default_img
                     revised_prompt = failure_msg
