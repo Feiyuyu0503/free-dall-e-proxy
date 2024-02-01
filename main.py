@@ -13,7 +13,7 @@ def setup_bots():
         telegram_bot_client = TelegramBotClient(config.API_ID, config.API_HASH, config.BOT_USERNAME)
         bot_clients["telegram"] = telegram_bot_client
 
-    if config.Discord.lower == "true":
+    if config.Discord.lower() == "true":
         discord_bot_client = DiscordBotClient(config.DiscordClientBotToken, config.DiscordChannelID,config.DiscordDalleBotID)
         bot_clients["discord"] = discord_bot_client
     
