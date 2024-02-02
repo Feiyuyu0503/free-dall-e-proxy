@@ -1,4 +1,4 @@
-from fastapi import FastAPI,Request
+from fastapi import FastAPI,Request,Depends
 from fastapi.responses import JSONResponse
 from fastapi.responses import RedirectResponse
 import gradio as gr
@@ -9,6 +9,7 @@ from typing import Optional
 from loguru import logger
 from fastapi.staticfiles import StaticFiles
 import os
+from auth.auth import get_current_api_key
 
 default_img = 'https://raw.githubusercontent.com/Feiyuyu0503/free-dall-e-proxy/main/.github/images/sorry_cat.png'
 failure_msg = 'Sorry, something wrong happened. Try again. Due to the restriction of coze, remember no violence(even sword...) and pornography.'
@@ -48,7 +49,7 @@ class ImageGenerationAPI:
     async def root(self):
         return RedirectResponse(url="/gradio")
 
-    async def create_image(self, request: Request, payload: ImageGenerationRequest):
+    async def create_image(self, request: Request, payload: ImageGenerationRequest, api_key: str = Depends(get_current_api_key)):
         text = payload.prompt
         platform = payload.platform if payload.platform in self.platforms else self.platforms[0]  # 从payload中获取平台信息，默认为第一个启用的平台
         bot_client = self.bot_clients.get(platform)

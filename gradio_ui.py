@@ -1,11 +1,12 @@
 import gradio as gr
 import aiohttp
 import asyncio
+from config import config
 
 # 当前任务
 current_task = None
 
-async def get_image_url(text,request:gr.Request):
+async def get_image_url(text,api_key,request:gr.Request):
     base_url = request.headers.get("host")
     scheme = request.headers.get("x-forwarded-proto") or "http"
     global current_task
@@ -22,10 +23,16 @@ async def get_image_url(text,request:gr.Request):
     }
     async with aiohttp.ClientSession() as session:
         # 创建一个可取消的任务
-        current_task = asyncio.create_task(session.post(f"{scheme}://{base_url}/v1/images/generations", json=payload))
+        if config.Web_share.lower() == "true":
+            headers = {"Authorization": "Bearer "+config.Key[0]} if config.Key else {"Authorization": "Bearer love_free_dall_e"}
+        else:
+            headers = {"Authorization": "Bearer "+(api_key.strip() if api_key else "love_free_dall_e")} # If you set "love_free_dall_e" be your KEY, then everyone can use this service without any KEY on the web.
+        current_task = asyncio.create_task(session.post(f"{scheme}://{base_url}/v1/images/generations", json=payload, headers=headers))
         try:
             # 等待任务完成
             response = await current_task
+            if response.status != 200:
+                return f"### Error: {response.status} {response.reason}"
             # 解析响应
             image_url = (await response.json())["data"][0]["url"]
             prompt = (await response.json())["data"][0]["revised_prompt"]
@@ -75,12 +82,16 @@ with gr.Blocks(css=custom_css) as demo:
     gr.Markdown("Enter some text and submit to generate an image.")
     with gr.Row():
        with gr.Column():
-           input_text = gr.Textbox(lines=2, placeholder="Enter text here...")
+           api_key_input = gr.Textbox(label="please input your api key", type="password",
+                                      placeholder="Enter your api key here if you have one.",
+                                      visible=False if (config.Web_share.lower()=="true" or not config.Key) else True
+                                      )
+           input_text = gr.Textbox(label="Prompts",lines=2, placeholder="Enter text here...")
            submit_button = gr.Button("Submit")
            cancel_button = gr.Button("Cancel")
        with gr.Column():
            output_markdown = gr.Markdown()
-    submit_button.click(fn=get_image_url, inputs=input_text, outputs=output_markdown)
+    submit_button.click(fn=get_image_url, inputs=[input_text,api_key_input], outputs=output_markdown)
     cancel_button.click(fn=cancel)
     gr.HTML(footer_html)
 
