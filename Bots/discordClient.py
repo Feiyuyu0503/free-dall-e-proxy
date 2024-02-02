@@ -3,12 +3,13 @@ from Bots.bots import BotClient
 import asyncio
 from config import config
 from loguru import logger
+from aiohttp import BasicAuth
 
 class DiscordBotClient(BotClient):
     def __init__(self, token: str, channel_id: int,dalle_bot_id: int):
         intents = discord.Intents.default()
         intents.message_content = True
-        self.client = discord.Client(intents=intents)
+        self.client = discord.Client(intents=intents,proxy=config.Proxy,proxy_auth=BasicAuth(*config.Proxy_Auth.split(':')) if config.Proxy_Auth else None)
         self.token = token
         self.channel_id = channel_id
         self.pending_responses = {}  # 用于存储消息 ID 和(事件,回复消息)
@@ -16,7 +17,7 @@ class DiscordBotClient(BotClient):
 
         @self.client.event
         async def on_ready():
-            logger.info("Discord client started! We have logged in as {self.client.user}!")
+            logger.info(f"Discord client started! We have logged in as {self.client.user}!")
 
     async def start(self):
         self.client.event(self.on_message)

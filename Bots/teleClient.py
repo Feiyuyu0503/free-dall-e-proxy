@@ -7,10 +7,15 @@ import aiofiles
 from loguru import logger
 from collections import deque
 import base64,uuid
+import python_socks
 
 class TelegramBotClient(BotClient):
     def __init__(self, api_id: int, api_hash: str, bot_username: str):
-        self.client = TelegramClient(StringSession(config.SESSION_STRING), api_id, api_hash)
+        client_proxy_addr,client_proxy_port = config.Proxy.split(':')[1:] if config.Proxy else (None,None)
+        client_proxy_auth_user,client_proxy_auth_password = config.Proxy_Auth.split(':') if config.Proxy_Auth else (None,None)
+        # https://stackoverflow.com/a/71668186
+        client_proxy = (python_socks.ProxyType.HTTP,client_proxy_addr[2:],int(client_proxy_port),True,client_proxy_auth_user,client_proxy_auth_password) if config.Proxy else None
+        self.client = TelegramClient(StringSession(config.SESSION_STRING), api_id, api_hash,proxy=client_proxy)
         self.bot_username = bot_username
         self.pending_responses = {}  # 用于存储消息 ID 和(事件,回复消息)
         self.pending_responses_queue = deque()

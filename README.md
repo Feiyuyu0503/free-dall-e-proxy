@@ -1,7 +1,7 @@
 # Free DALL·E Proxy
 <img src=".github\images\demo.webp" width="50%" height="50%"><img src=".github\images\demo2.webp" width="50%" height="50%">
 
-### English · [简体中文](./README.zh-CN.md)
+### English · [简体中文](./README.zh-CN.md) · [Changelog](./docs/CHANGELOG.md)
 ## Introduction
 `free-dall-e-proxy` is a project that leverages the power of bots supported by the [coze](https://www.coze.com) (currently Telegram and Discord) to provide free access to OpenAI's DALL·E 3 image generation capabilities. This proxy service offers an OpenAI-standard API endpoint, allowing developers to easily integrate DALL·E 3 into their applications.
 

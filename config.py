@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import os
 from loguru import logger
+from aiohttp import BasicAuth
 
 class Config:
     # Load .env file
@@ -11,6 +12,8 @@ class Config:
         logger.warning(f"the env 'FASTAPI_SERVER_URL' is deprecated, please remove it and set 'PORT' in your data/.env instead.(Default: PORT=8000)")
     PORT = int(os.getenv('PORT') or 8000)
     Timeout = float((os.getenv('TIMEOUT')) or 60)
+    Proxy = os.getenv('PROXY')
+    Proxy_Auth = os.getenv('PROXY_AUTH')
     # telegram
     TELEGRAM = os.getenv('TELEGRAM')
     API_ID = int(os.getenv('API_ID') or -1)

@@ -1,7 +1,7 @@
 # Free DALL·E Proxy
 <img src=".github\images\demo.webp" width="50%" height="50%"><img src=".github\images\demo2.webp" width="50%" height="50%">
 
-### [English](./README.md) · 简体中文
+### [English](./README.md) · 简体中文 · [更新记录](./docs/CHANGELOG.md)
 ## 介绍
 `free-dall-e-proxy`是利用由[coze](https://www.coze.com)支持的机器人（目前是Telegram和Discord），提供免费访问OpenAI的DALL·E 3图像生成的代理服务。项目提供了一个符合OpenAI标准的API端点，允许开发者轻松地将此DALL·E 3代理服务集成到他们的应用程序中。
 
