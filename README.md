@@ -87,7 +87,7 @@ To generate images with DALL·E 3, send a POST request to the proxy's API endpoi
    # Use this command to send a request to the DALL·E image generation API.
    curl https://dalle.feiyuyu.net/v1/images/generations \
      -H "Content-Type: application/json" \
-     -H "Authorization: Bearer $KEY_WHICH_NOW_IS_WHATEVER" \
+     -H "Authorization: Bearer $KEY" \
      -d '{
        "model": "dall-e-3",
        "prompt": "A cute cat",

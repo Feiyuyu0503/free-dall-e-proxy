@@ -86,7 +86,7 @@
    # 使用此命令发送请求到 DALL·E图像生成API。
    curl https://dalle.feiyuyu.net/v1/images/generations \
      -H "Content-Type: application/json" \
-     -H "Authorization: Bearer $KEY_WHICH_NOW_IS_WHATEVER" \
+     -H "Authorization: Bearer $KEY" \
      -d '{
        "model": "dall-e-3",
        "prompt": "一只可爱的猫",
