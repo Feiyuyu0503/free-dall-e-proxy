@@ -14,7 +14,7 @@ def val_current_api_key(credentials: HTTPAuthorizationCredentials = Security(sec
     if config.Key and api_key not in config.Key:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="invalid api key.",
+            detail="invalid api key. Go here to get your api key: https://dalle.feiyuyu.net/dashboard",
         )
     if api_key in config.keys["total_keys"].keys():
         user_id = list(config.keys["total_keys"][api_key].keys())[0]
