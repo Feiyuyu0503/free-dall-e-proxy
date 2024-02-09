@@ -5,3 +5,4 @@ flagged
 *.session
 *.session-journal
 data/images
+data/keys.json

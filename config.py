@@ -1,7 +1,9 @@
 from dotenv import load_dotenv
 import os
 from loguru import logger
-from aiohttp import BasicAuth
+import json
+import threading
+import time
 
 class Config:
     # Load .env file
@@ -14,6 +16,17 @@ class Config:
     Timeout = float((os.getenv('TIMEOUT')) or 60)
     Key = os.getenv('KEY')
     Key = list(map(str.strip, Key.split(','))) if Key else None
+    # add keys
+    if os.path.exists(os.path.join('data','keys.json')):
+        with open(os.path.join('data','keys.json'),'r') as f:
+            keys = json.load(f)
+            if 'total_keys' in keys:
+                total_keys = keys['total_keys']
+                Key.extend(list(total_keys.keys()))
+    else:
+        keys = {"total_keys":{}}
+        with open(os.path.join('data','keys.json'),'w') as f:
+            json.dump(keys,f)
     Web_share = os.getenv('WEB_SHARE') or 'False'
     Proxy = os.getenv('PROXY')
     Proxy_Auth = os.getenv('PROXY_AUTH')
@@ -39,5 +52,23 @@ class Config:
 
     # mkdir data/images if not exists
     os.makedirs(os.path.join('data', 'images'), exist_ok=True)
+
+    # set reset trigger
+    # 每2个小时写入一次keys.json
+    left_times_each2h = 32
+    def reset_keys():
+        time.sleep(10)
+        while True:
+            # 重置left times
+            for key in config.keys["total_keys"]:
+                for user_id in config.keys["total_keys"][key]:
+                    config.keys["total_keys"][key][user_id][0] = config.left_times_each2h
+            with open(os.path.join('data','keys.json'),'w') as f:
+                json.dump(config.keys,f)
+            logger.info("keys.json updated.")
+            time.sleep(60*60*2)
+    
+    threading.Thread(target=reset_keys,daemon=True).start()
+
 
 config = Config()

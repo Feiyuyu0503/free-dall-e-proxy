@@ -89,6 +89,7 @@ with gr.Blocks(css=custom_css) as demo:
            input_text = gr.Textbox(label="Prompts",lines=2, placeholder="Enter text here...")
            submit_button = gr.Button("Submit")
            cancel_button = gr.Button("Cancel")
+           link_html = gr.HTML('<a href="/dashboard" target="_blank">Get api key here</a>')
        with gr.Column():
            output_markdown = gr.Markdown()
     submit_button.click(fn=get_image_url, inputs=[input_text,api_key_input], outputs=output_markdown)

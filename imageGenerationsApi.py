@@ -9,7 +9,7 @@ from typing import Optional
 from loguru import logger
 from fastapi.staticfiles import StaticFiles
 import os
-from auth.auth import get_current_api_key
+from auth import val_current_api_key,auth_callback,auth_github,dashboard
 
 default_img = 'https://raw.githubusercontent.com/Feiyuyu0503/free-dall-e-proxy/main/.github/images/sorry_cat.png'
 failure_msg = 'Sorry, something wrong happened. Try again. Due to the restriction of coze, remember no violence(even sword...) and pornography.'
@@ -20,7 +20,7 @@ class ImageGenerationRequest(BaseModel):
     n: Optional[int] = Field(1, description="The number of images to generate.For dall-e-3, only n=1 is supported.", ge=1, le=1)
     quality: Optional[str] = Field("standard", description="The quality of the image that will be generated. hd creates images with finer details and greater consistency across the image. This param is only supported for dall-e-3")
     response_format: Optional[str] = Field("url", description="The format in which the generated images are returned.")
-    size: Optional[str] = Field("1024x1024", description="The size of the generated images. Must be one of 1024x1024, 1792x1024, or 1024x1792 for dall-e-3 models.")
+    size: Optional[str] = Field("1024x1024", description="The size of the generated images. Must be 1024x1024.")
     style: Optional[str] = Field("vivid", description="The style of the generated images.Must be one of vivid or natural")
     user: Optional[str] = Field(None, description="A unique identifier representing your end-user.",examples=["free-dall-e-user"])
     platform: Optional[str] = Field(None, description="The platform which coze supported to use for image generation.",examples=["telegram","discord"])
@@ -41,6 +41,10 @@ class ImageGenerationAPI:
     def setup_routes(self):
         self.app.get("/")(self.root)
         self.app.post("/v1/images/generations")(self.create_image)
+        # github auth
+        self.app.get("/auth/github")(auth_github)
+        self.app.get("/auth/callback")(auth_callback)
+        self.app.get("/dashboard")(dashboard)
         
     def mount_gradio_interface(self):
         self.app = gr.mount_gradio_app(self.app, demo, "/gradio")
@@ -49,7 +53,7 @@ class ImageGenerationAPI:
     async def root(self):
         return RedirectResponse(url="/gradio")
 
-    async def create_image(self, request: Request, payload: ImageGenerationRequest, api_key: str = Depends(get_current_api_key)):
+    async def create_image(self, request: Request, payload: ImageGenerationRequest, api_key: str = Depends(val_current_api_key)):
         text = payload.prompt
         platform = payload.platform if payload.platform in self.platforms else self.platforms[0]  # 从payload中获取平台信息，默认为第一个启用的平台
         bot_client = self.bot_clients.get(platform)
