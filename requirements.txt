@@ -1,5 +1,5 @@
 discord.py==2.3.2
-fastapi==0.109.0
+fastapi==0.109.1
 gradio==4.15.0
 python-dotenv==1.0.0
 requests==2.31.0
