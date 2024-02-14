@@ -16,6 +16,7 @@ SESSION_NAME=whatever  # replace with your session name
 ![](../.github/images/tutorials/telegram_fig2.png)
 `BOT_USERNAME`: The bot username which you set at [botfather](https://t.me/BotFather) when you [create coze agent](./how_to_create_coze_agent.md).
 `SSESSION_NAME`: You can set this env into any string, it will save telegram client session in data/${SESSION_NAME}.session when you succeed to run the project.
+`TELEGRAM_GROUP_ID`: The id of the group which contains the login telegram account and coze bot.
 
 ### Discord
 ```
