@@ -1,5 +1,4 @@
-from Bots.teleClient import TelegramBotClient
-from Bots.discordClient import DiscordBotClient
+from Bots import TelegramBotClient,DiscordBotClient
 from imageGenerationsApi import ImageGenerationAPI
 from config import config
 import uvicorn

@@ -4,7 +4,7 @@ from config import config
 
 security = HTTPBearer()
 
-def get_current_api_key(credentials: HTTPAuthorizationCredentials = Security(security)):
+def val_current_api_key(credentials: HTTPAuthorizationCredentials = Security(security)):
     if credentials.scheme != "Bearer":
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

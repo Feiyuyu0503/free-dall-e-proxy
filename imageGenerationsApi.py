@@ -9,7 +9,7 @@ from typing import Optional
 from loguru import logger
 from fastapi.staticfiles import StaticFiles
 import os
-from auth.auth import get_current_api_key
+from auth import val_current_api_key
 
 default_img = 'https://raw.githubusercontent.com/Feiyuyu0503/free-dall-e-proxy/main/.github/images/sorry_cat.png'
 failure_msg = 'Sorry, something wrong happened. Try again. Due to the restriction of coze, remember no violence(even sword...) and pornography.'
@@ -49,23 +49,27 @@ class ImageGenerationAPI:
     async def root(self):
         return RedirectResponse(url="/gradio")
 
-    async def create_image(self, request: Request, payload: ImageGenerationRequest, api_key: str = Depends(get_current_api_key)):
+    async def create_image(self, request: Request, payload: ImageGenerationRequest, api_key: str = Depends(val_current_api_key)):
         text = payload.prompt
         platform = payload.platform if payload.platform in self.platforms else self.platforms[0]  # 从payload中获取平台信息，默认为第一个启用的平台
         bot_client = self.bot_clients.get(platform)
         image_markdown = await bot_client.send_message(text)
         if platform == "telegram":
             try:
-                if image_markdown.endswith(".png"):
+                if image_markdown and image_markdown.endswith(".png"):
                     host = request.headers.get("host")
                     scheme = request.url.scheme
                     path = f"/images/{image_markdown}"
                     url = f"{scheme}://{host}{path}"
                     revised_prompt = text
+                elif image_markdown and image_markdown.startswith("https"):
+                    url = image_markdown
+                    revised_prompt = failure_msg
+                    logger.warning("Telegram client just got an url, maybe it is an irrelevant image.")
                 else:
                     url = default_img
-                    revised_prompt = failure_msg
-                    logger.warning("Telegram client just got pure texts, no image url.")
+                    revised_prompt = image_markdown if image_markdown else failure_msg
+                    logger.error(f"Telegram client got invalid response: {image_markdown}")
             except Exception as e:
                     url = default_img
                     revised_prompt = "Sorry, try again."
@@ -73,7 +77,7 @@ class ImageGenerationAPI:
         elif platform == "discord":
             try:
                 url = image_markdown if image_markdown.startswith("https") else default_img
-                revised_prompt = text if image_markdown.startswith("https") else failure_msg
+                revised_prompt = text if image_markdown.startswith("https") else (image_markdown if image_markdown else failure_msg)
             except Exception as e:
                 url = default_img
                 revised_prompt = "Sorry, try again."

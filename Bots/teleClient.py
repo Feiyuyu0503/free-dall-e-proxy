@@ -17,8 +17,8 @@ class TelegramBotClient(BotClient):
         client_proxy = (python_socks.ProxyType.HTTP,client_proxy_addr[2:],int(client_proxy_port),True,client_proxy_auth_user,client_proxy_auth_password) if config.Proxy else None
         self.client = TelegramClient(StringSession(config.SESSION_STRING), api_id, api_hash,proxy=client_proxy)
         self.bot_username = bot_username
+        self.group_id = config.TelegramGroupID
         self.pending_responses = {}  # 用于存储消息 ID 和(事件,回复消息)
-        self.pending_responses_queue = deque()
 
     async def start(self):
         await self.client.start()
@@ -36,12 +36,11 @@ class TelegramBotClient(BotClient):
 
     async def send_message(self, text: str):
         try:
-            sent_msg = await self.client.send_message(self.bot_username, text)
+            sent_msg = await self.client.send_message(self.group_id, self.bot_username+' '+text)
             msg_id = sent_msg.id
              # 为这个消息创建一个新的 Event 对象
             response_event = asyncio.Event()
             self.pending_responses[msg_id] = (response_event, None)
-            self.pending_responses_queue.append(msg_id)
             try:
                 await asyncio.wait_for(response_event.wait(), timeout=config.Timeout)
             except asyncio.TimeoutError:
@@ -65,19 +64,31 @@ class TelegramBotClient(BotClient):
 
     async def handle_response(self, event):
         """
-        It is not recommended to use Telegram, because we cannot get the reply_to_msg_id anymore util coze change the behavior of the telegram bot.
+        generated images will be saved to local dir:data/images
         """
-        #logger.info(f"Telegram client received message: {event.message.media}")
-        msg_id = event.message.id
-        guess_reply_to_msg_id = self.pending_responses_queue.popleft() if self.pending_responses_queue else None
-        #logger.info(f"guess_reply_to_msg_id: {guess_reply_to_msg_id}")
-        #logger.info(f"pending_responses: {self.pending_responses}")
-        if event.is_private and event.message.media and guess_reply_to_msg_id in self.pending_responses:
-            #media_bytes = await self.client.download_media(event.message,bytes)
-            #encoded_image = base64.b64encode(media_bytes).decode('utf-8') # sync
-            img_save_name = str(msg_id)+'-'+str(uuid.uuid4()) + '.png'
-            await self.client.download_media(event.message,file=os.path.join('data','images',img_save_name))
-            response_event, _ = self.pending_responses[guess_reply_to_msg_id]
-            #self.pending_responses[guess_reply_to_msg_id] = (response_event, encoded_image)
-            self.pending_responses[guess_reply_to_msg_id] = (response_event, f"{img_save_name}")
-            response_event.set()
+        reply_to_msg_id = event.message.reply_to_msg_id
+        if reply_to_msg_id in self.pending_responses:
+            response_event, _ = self.pending_responses[reply_to_msg_id]
+            try:
+                if event.message.media:
+                    #media_bytes = await self.client.download_media(event.message,bytes)
+                    #encoded_image = base64.b64encode(media_bytes).decode('utf-8') # sync
+                    #self.pending_responses[guess_reply_to_msg_id] = (response_event, encoded_image)
+                    img_save_name = str(reply_to_msg_id)+'-'+str(uuid.uuid4()) + '.png'
+                    await self.client.download_media(event.message,file=os.path.join('data','images',img_save_name))
+                    self.pending_responses[reply_to_msg_id] = (response_event, f"{img_save_name}")
+                else:
+                    if event.message.message.startswith('!'):
+                        msg = event.message.message.split('(')[1][:-1] if '(' in event.message.message else None
+                        if msg:
+                            self.pending_responses[reply_to_msg_id] = (response_event, msg)
+                        else:
+                            raise Exception("No message content found")
+                    else:
+                        await asyncio.sleep(5)
+                        msg = event.message.message if event.message else None
+                        self.pending_responses[reply_to_msg_id] = (response_event, msg)
+            except Exception as e:
+                logger.error(f"Telegram client handle response error: {e}")
+            finally:
+                response_event.set()

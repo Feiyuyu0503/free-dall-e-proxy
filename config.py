@@ -30,6 +30,7 @@ class Config:
     if os.path.exists(os.path.join('data',SESSION_NAME)) and not SESSION_STRING:
         with open(os.path.join('data',SESSION_NAME),'r') as f:
             SESSION_STRING = f.read().strip()
+    TelegramGroupID = int(os.getenv('TELEGRAM_GROUP_ID') or -1)
 
     # discord
     Discord = os.getenv('DISCORD')
