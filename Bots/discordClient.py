@@ -49,16 +49,33 @@ class DiscordBotClient(BotClient):
             logger.error(f"Discord client send message error: {e} \n check your input texts or your data/.env file.")
 
     async def on_message(self, message):
-        # 请确保不响应机器人自己发送的消息
         if message.author == self.client.user:
             return
         reply_to_msg_id = message.reference.message_id if message.reference else None
         if reply_to_msg_id is not None and reply_to_msg_id in self.pending_responses:
+            response_event, _ = self.pending_responses[reply_to_msg_id]
             try:
-                response_event, _ = self.pending_responses[reply_to_msg_id]
-                self.pending_responses[reply_to_msg_id] = (response_event, message.embeds[0].image.url)
-                response_event.set()
+                url = message.embeds[0].image.url if message.embeds and message.embeds[0].image else None
+                if url:
+                    self.pending_responses[reply_to_msg_id] = (response_event, url)
+                else:
+                    raise Exception("No image url found")
             except Exception as e:
                 logger.error(f"Discord client handle response error: {e}")
+                try:
+                    if message.content.startswith('!'):
+                        msg = message.content.split('(')[1][:-1] if '(' in message.content else None
+                        if msg:
+                            self.pending_responses[reply_to_msg_id] = (response_event, msg)
+                        else:
+                            raise Exception("No message content found")
+                    else:
+                        await asyncio.sleep(5)
+                        msg = message.content
+                        self.pending_responses[reply_to_msg_id] = (response_event, msg)
+                except Exception as e:
+                    logger.error(f"Discord client handle response error: {e}")
+            finally:
+                response_event.set()
 
     

@@ -6,7 +6,7 @@ on:
     paths-ignore:
        - README.md
        - README.zh-CN.md
-       - docs
+       - docs/*.md
        - LICENSE
 
 jobs:

@@ -9,13 +9,15 @@ API_ID=23333333 # replace with your api id
 API_HASH=96z7a292723306fdgb2338d2338cr6d6 # replace with your api hash
 BOT_USERNAME=@dalle_bot # replace with your bot username
 SESSION_NAME=whatever  # replace with your session name
+TELEGRAM_GROUP_ID=-123456789 # replace with your telegram group id
 ```
 `Telegram`: True/False, determine whether to use the telegram platform. You can ignore all envs related to telegram if you set `Telegram` to False.  
 `API_ID`,`API_HASH`: Login to [telegram](https://my.telegram.org/apps),then click `API Development tools`. Fill in your application details at the new application window. There is no need to enter any URL, and only the first two fields (App title and Short name) can currently be changed later.
 ![](../.github/images/tutorials/telegram_fig1.png)
 ![](../.github/images/tutorials/telegram_fig2.png)
 `BOT_USERNAME`: The bot username which you set at [botfather](https://t.me/BotFather) when you [create coze agent](./how_to_create_coze_agent.md).
-`SSESSION_NAME`: You can set this env into any string, it will save telegram client session in data/${SESSION_NAME}.session when you succeed to run the project.
+`SSESSION_NAME`: You can set this env into any string, it will save telegram client session in data/${SESSION_NAME}.session when you succeed to run the project.  
+`TELEGRAM_GROUP_ID`: The id of the group which contains the login telegram account and coze bot.
 
 ### Discord
 ```
