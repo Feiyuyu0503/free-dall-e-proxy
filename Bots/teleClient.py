@@ -5,7 +5,7 @@ from telethon.sessions import StringSession
 from config import config
 import aiofiles
 from loguru import logger
-from collections import deque
+from telethon.tl.types import MessageMediaWebPage
 import base64,uuid
 import python_socks
 
@@ -74,20 +74,16 @@ class TelegramBotClient(BotClient):
                     #media_bytes = await self.client.download_media(event.message,bytes)
                     #encoded_image = base64.b64encode(media_bytes).decode('utf-8') # sync
                     #self.pending_responses[guess_reply_to_msg_id] = (response_event, encoded_image)
-                    img_save_name = str(reply_to_msg_id)+'-'+str(uuid.uuid4()) + '.png'
-                    await self.client.download_media(event.message,file=os.path.join('data','images',img_save_name))
-                    self.pending_responses[reply_to_msg_id] = (response_event, f"{img_save_name}")
-                else:
-                    if event.message.message.startswith('!'):
-                        msg = event.message.message.split('(')[1][:-1] if '(' in event.message.message else None
-                        if msg:
-                            self.pending_responses[reply_to_msg_id] = (response_event, msg)
-                        else:
-                            raise Exception("No message content found")
+                    if isinstance(event.message.media, MessageMediaWebPage):
+                        self.pending_responses[reply_to_msg_id] = (response_event, event.message.media.webpage.url)
                     else:
-                        await asyncio.sleep(5)
-                        msg = event.message.message if event.message else None
-                        self.pending_responses[reply_to_msg_id] = (response_event, msg)
+                        img_save_name = str(reply_to_msg_id)+'-'+str(uuid.uuid4()) + '.png'
+                        await self.client.download_media(event.message,file=os.path.join('data','images',img_save_name))
+                        self.pending_responses[reply_to_msg_id] = (response_event, f"{img_save_name}")
+                else:
+                    await asyncio.sleep(5)
+                    msg = event.message.message if event.message else None
+                    self.pending_responses[reply_to_msg_id] = (response_event, msg)
             except Exception as e:
                 logger.error(f"Telegram client handle response error: {e}")
             finally:
