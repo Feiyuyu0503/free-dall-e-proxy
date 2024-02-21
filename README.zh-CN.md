@@ -1,11 +1,12 @@
 # Free DALL·E Proxy
 <p>
-    <img src="https://img.shields.io/github/actions/workflow/status/Feiyuyu0503/free-dall-e-proxy/docker-publish.yml?label=Build">
-    <img src="https://img.shields.io/docker/pulls/feiyuyu/free-dall-e-proxy">
+   <img src="https://img.shields.io/github/actions/workflow/status/Feiyuyu0503/free-dall-e-proxy/docker-publish.yml?label=Build">
+   <img src="https://img.shields.io/docker/pulls/feiyuyu/free-dall-e-proxy">
    <img src="https://img.shields.io/github/license/Feiyuyu0503/free-dall-e-proxy">
    <img src="https://img.shields.io/website?url=https%3A%2F%2Fdalle.feiyuyu.net%2Fgradio">
+   <br></br>
+   <img src=".github\images\demo.webp" width="50%" height="50%"><img src=".github\images\demo2.webp" width="50%" height="50%">
 </p>
-<img src=".github\images\demo.webp" width="50%" height="50%"><img src=".github\images\demo2.webp" width="50%" height="50%">
 
 ### [English](./README.md) · 简体中文 · [更新记录](./docs/CHANGELOG.md)
 ## 介绍
