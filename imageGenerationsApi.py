@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 from typing import Optional
 from loguru import logger
 from fastapi.staticfiles import StaticFiles
-import os
+import os,random
 from auth import val_current_api_key,auth_callback,auth_github,dashboard
 
 default_img = 'https://raw.githubusercontent.com/Feiyuyu0503/free-dall-e-proxy/main/.github/images/sorry_cat.png'
@@ -55,7 +55,7 @@ class ImageGenerationAPI:
 
     async def create_image(self, request: Request, payload: ImageGenerationRequest, api_key: str = Depends(val_current_api_key)):
         text = payload.prompt
-        platform = payload.platform if payload.platform in self.platforms else self.platforms[0]  # 从payload中获取平台信息，默认为第一个启用的平台
+        platform = payload.platform if payload.platform in self.platforms else random.choice(self.platforms)  # 从payload中获取平台信息，默认随机选择一个已启用平台
         bot_client = self.bot_clients.get(platform)
         image_markdown = await bot_client.send_message(text)
         if platform == "telegram":
