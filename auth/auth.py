@@ -28,3 +28,17 @@ def val_current_api_key(credentials: HTTPAuthorizationCredentials = Security(sec
             config.keys["total_keys"][api_key][user_id][0] -= 1
             config.keys["total_keys"][api_key][user_id][1] += 1
     return api_key
+
+def val_query_api_key(credentials: HTTPAuthorizationCredentials = Security(security)):
+    if credentials.scheme != "Bearer":
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="use Bearer token for authentication.",
+        )
+    api_key = credentials.credentials
+    if config.Key and api_key not in config.Key:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="invalid api key. Go here to get your api key: https://dalle.feiyuyu.net",
+        )
+    return api_key

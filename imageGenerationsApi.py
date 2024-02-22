@@ -8,8 +8,9 @@ from pydantic import BaseModel, Field
 from typing import Optional
 from loguru import logger
 from fastapi.staticfiles import StaticFiles
-import os,random
-from auth import val_current_api_key,auth_callback,auth_github,dashboard
+import os,random,time
+from auth import val_current_api_key,auth_callback,val_query_api_key,auth_github,dashboard
+from config import config
 
 default_img = 'https://raw.githubusercontent.com/Feiyuyu0503/free-dall-e-proxy/main/.github/images/sorry_cat.png'
 failure_msg = 'Sorry, something wrong happened. Try again. Due to the restriction of coze, remember no violence(even sword...) and pornography.'
@@ -41,6 +42,7 @@ class ImageGenerationAPI:
     def setup_routes(self):
         self.app.get("/")(self.root)
         self.app.post("/v1/images/generations")(self.create_image)
+        self.app.post("/requests")(self.query_requests)
         # github auth
         self.app.get("/auth/github")(auth_github)
         self.app.get("/auth/callback")(auth_callback)
@@ -87,6 +89,15 @@ class ImageGenerationAPI:
                 revised_prompt = "Sorry, try again."
                 logger.error(f"Discord client got invalid response: {image_markdown},{e}") # timeout or ...
         return JSONResponse(content={"data": [{"url": url, "revised_prompt": revised_prompt}]},status_code=200)
+    
+    async def query_requests(self, api_key: str = Depends(val_query_api_key)):
+        reset_mins = 60*config.reset_interval - (time.time() - config.system_start_time)%(60*60*config.reset_interval)//60
+        if api_key in config.keys["total_keys"]:
+            user_id = list(config.keys["total_keys"][api_key].keys())[0]
+            left_times = config.keys["total_keys"][api_key][user_id][0]
+        else:
+            left_times = "unlimited"
+        return JSONResponse(content={"left_times": left_times,"reset_mins":reset_mins},status_code=200)
 
     async def startup_event(self):
         if not self.bot_clients:

@@ -57,6 +57,7 @@ class Config:
     # set reset trigger
     # 每RESET_INTERVAL个小时写入一次keys.json
     left_times_each2h = int(os.getenv('CALL_TIMES') or 24)
+    reset_interval = int(os.getenv('RESET_INTERVAL') or 2)
     def reset_keys():
         time.sleep(10)
         while True:
@@ -67,9 +68,10 @@ class Config:
             with open(os.path.join('data','keys.json'),'w') as f:
                 json.dump(config.keys,f)
             logger.info("keys.json updated.")
-            time.sleep(60*60*int(os.getenv('RESET_INTERVAL') or 2))
+            time.sleep(60*60*config.reset_interval)
     
     threading.Thread(target=reset_keys,daemon=True).start()
+    system_start_time = time.time()
 
 
 config = Config()
