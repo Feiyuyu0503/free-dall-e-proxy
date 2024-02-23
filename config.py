@@ -34,7 +34,8 @@ class Config:
 
     # discord
     Discord = os.getenv('DISCORD')
-    DiscordClientBotToken = os.getenv('DISCORD_ClIENT_BOT_TOKEN')
+    #DiscordClientBotToken = os.getenv('DISCORD_ClIENT_BOT_TOKEN')
+    DiscordClientBotToken = os.getenv('DISCORD_AUTH')
     DiscordChannelID = int(os.getenv('DISCORD_CHANNEL_ID') or -1)
     DiscordDalleBotID = int(os.getenv('DISCORD_DALLE_BOT_ID') or -1)
 
