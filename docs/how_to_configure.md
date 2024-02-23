@@ -24,7 +24,7 @@ TELEGRAM_GROUP_ID=-123456789 # replace with your telegram group id
 `TELEGRAM_GROUP_ID`: The id of the group which contains the login telegram account and coze bot.
 
 ### Discord
-> note: Has the risk 
+> note: There is a risk of being banned, please bear the consequences yourself!!!
 ```
 DISCORD=True   # set to True if you want to use coze-discord bot
 DISCORD_AUTH=MyIxMDUzNDY3eTk5rzcuMTQxMA.G0fBkt.7z6pXlhDZcacFr36 # replace with your discord token  
