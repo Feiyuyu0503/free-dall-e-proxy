@@ -34,24 +34,18 @@
    ```
 4. 拉取我发布的镜像或自己构建Docker镜像：
    ```bash
-   # 拉取我发布的镜像
+   # 拉取我发布的镜像,或者你也可以自己构建Docker镜像
    docker pull feiyuyu/free-dall-e-proxy
-   # 或者，你也可以使用以下命令自己构建Docker镜像：
-   docker build -t free-dall-e-proxy .
    ```
 5. 运行Docker容器：
    ```bash
    # 如果你在data/.env中设置`Telegram`为True，可能需要在运行以下命令后根据提示用你的账号登录。
    # 登录后，你可以按'ctrl+p+q'来脱离容器而不停止容器。
-   # 如果使用我发布的镜像，运行：
+   # 运行：
    docker run -it -p 8000:8000 -v $PWD/data:/app/data --name free-dall-e-proxy feiyuyu/free-dall-e-proxy
-   # 如果你是自己构建的镜像，运行：
-   docker run -it -p 8000:8000 -v $PWD/data:/app/data --name free-dall-e-proxy free-dall-e-proxy
 
    # 如果你在data/.env中只设置了`DISCORD`为True，你可以运行以下命令代替：
    docker run -it -d -p 8000:8000 -v $PWD/data:/app/data --name free-dall-e-proxy feiyuyu/free-dall-e-proxy
-   # 或者（如果你使用了自己构建的镜像）
-   docker run -it -d -p 8000:8000 -v $PWD/data:/app/data --name free-dall-e-proxy free-dall-e-proxy
    ```
 
 代理服务现在将在你的主机机器的8000端口上运行。

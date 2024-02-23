@@ -8,7 +8,7 @@ from aiohttp import BasicAuth
 class DiscordBotClient(BotClient):
     def __init__(self, token: str, channel_id: int,dalle_bot_id: int):
         intents = discord.Intents.default()
-        intents.message_content = True
+        #intents.message_content = True
         self.client = discord.Client(intents=intents,proxy=config.Proxy,proxy_auth=BasicAuth(*config.Proxy_Auth.split(':')) if config.Proxy_Auth else None)
         self.token = token
         self.channel_id = channel_id
@@ -21,7 +21,7 @@ class DiscordBotClient(BotClient):
 
     async def start(self):
         self.client.event(self.on_message)
-        asyncio.create_task(self.client.start(self.token))
+        asyncio.create_task(self.client.start(self.token,bot=False))
 
     async def stop(self):
         await self.client.close()
