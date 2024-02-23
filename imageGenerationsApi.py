@@ -95,9 +95,11 @@ class ImageGenerationAPI:
         if api_key in config.keys["total_keys"]:
             user_id = list(config.keys["total_keys"][api_key].keys())[0]
             left_times = config.keys["total_keys"][api_key][user_id][0]
+            total_times = config.keys["total_keys"][api_key][user_id][1]
         else:
             left_times = "unlimited"
-        return JSONResponse(content={"left_times": left_times,"reset_mins":reset_mins},status_code=200)
+            total_times = "unlimited"
+        return JSONResponse(content={"left_times": left_times,"reset_mins":reset_mins,"total_called":total_times},status_code=200)
 
     async def startup_event(self):
         if not self.bot_clients:
