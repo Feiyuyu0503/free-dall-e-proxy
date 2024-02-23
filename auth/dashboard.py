@@ -87,6 +87,12 @@ async def dashboard(access_token: str = Cookie(None)):
             }}'
             </code>
             </pre>
+            <p>You can query the current usage by the following api.</p>
+            <pre>
+            <code>
+            curl -X POST https://dalle.feiyuyu.net/requests -H "Content-Type: application/json" -H "Authorization: Bearer {key}"
+            </code>
+            </pre>
         </body>
         </html>
         '''
