@@ -10,7 +10,7 @@
 
 ### [English](./README.md) · 简体中文 · [更新记录](./docs/CHANGELOG.md)
 ## 介绍
-`free-dall-e-proxy`是利用由[coze](https://www.coze.com)支持的机器人（目前是Telegram和Discord），提供免费访问OpenAI的DALL·E 3图像生成的代理服务。项目提供了一个符合OpenAI标准的API端点，允许开发者轻松地将此DALL·E 3代理服务集成到他们的应用程序中。
+`free-dall-e-proxy`是利用由[coze](https://www.coze.com)支持的机器人（目前是Telegram和~~Discord~~），提供免费访问OpenAI的DALL·E 3图像生成的代理服务。项目提供了一个符合OpenAI标准的API端点，允许开发者轻松地将此DALL·E 3代理服务集成到他们的应用程序中。
 
 ## 预备条件
 在你开始使用`free-dall-e-proxy`之前，你需要在[Coze平台](https://www.coze.com/docs/publish/telegram.html)上配置智能体Agent。更多细节参考[如何创建coze智能体](./docs/how_to_create_coze_agent.md)。
@@ -34,24 +34,18 @@
    ```
 4. 拉取我发布的镜像或自己构建Docker镜像：
    ```bash
-   # 拉取我发布的镜像
+   # 拉取我发布的镜像,或者你也可以自己构建Docker镜像
    docker pull feiyuyu/free-dall-e-proxy
-   # 或者，你也可以使用以下命令自己构建Docker镜像：
-   docker build -t free-dall-e-proxy .
    ```
 5. 运行Docker容器：
    ```bash
    # 如果你在data/.env中设置`Telegram`为True，可能需要在运行以下命令后根据提示用你的账号登录。
    # 登录后，你可以按'ctrl+p+q'来脱离容器而不停止容器。
-   # 如果使用我发布的镜像，运行：
+   # 运行：
    docker run -it -p 8000:8000 -v $PWD/data:/app/data --name free-dall-e-proxy feiyuyu/free-dall-e-proxy
-   # 如果你是自己构建的镜像，运行：
-   docker run -it -p 8000:8000 -v $PWD/data:/app/data --name free-dall-e-proxy free-dall-e-proxy
 
    # 如果你在data/.env中只设置了`DISCORD`为True，你可以运行以下命令代替：
    docker run -it -d -p 8000:8000 -v $PWD/data:/app/data --name free-dall-e-proxy feiyuyu/free-dall-e-proxy
-   # 或者（如果你使用了自己构建的镜像）
-   docker run -it -d -p 8000:8000 -v $PWD/data:/app/data --name free-dall-e-proxy free-dall-e-proxy
    ```
 
 代理服务现在将在你的主机机器的8000端口上运行。

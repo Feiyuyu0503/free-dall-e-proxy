@@ -17,6 +17,8 @@ class Config:
     Web_share = os.getenv('WEB_SHARE') or 'False'
     Proxy = os.getenv('PROXY')
     Proxy_Auth = os.getenv('PROXY_AUTH')
+    if Proxy:
+        logger.info(f"Proxy: {Proxy} enabled.")
 
     # telegram
     TELEGRAM = os.getenv('TELEGRAM')

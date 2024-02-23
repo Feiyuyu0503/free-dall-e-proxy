@@ -10,7 +10,7 @@
 
 ### English · [简体中文](./README.zh-CN.md) · [Changelog](./docs/CHANGELOG.md)
 ## Introduction
-`free-dall-e-proxy` is a project that leverages the power of bots supported by the [coze](https://www.coze.com) (currently Telegram and Discord) to provide free access to OpenAI's DALL·E 3 image generation capabilities. This proxy service offers an OpenAI-standard API endpoint, allowing developers to easily integrate DALL·E 3 into their applications.
+`free-dall-e-proxy` is a project that leverages the power of bots supported by the [coze](https://www.coze.com) (currently Telegram and ~~Discord~~) to provide free access to OpenAI's DALL·E 3 image generation capabilities. This proxy service offers an OpenAI-standard API endpoint, allowing developers to easily integrate DALL·E 3 into their applications.
 
 ## Prerequisites
 Before you can start using `free-dall-e-proxy`, you need to configure agents on the [Coze platform](https://www.coze.com/docs/publish/telegram.html). These agents act as intermediaries, facilitating the communication between your application and the DALL·E 3 API through the supported bots. More details refer to [how_to_create_coze_agent](./docs/how_to_create_coze_agent.md).
@@ -33,26 +33,20 @@ For ease of deployment, `free-dall-e-proxy` is containerized using Docker. To de
    cp data/.env.example data/.env
    vim data/.env
    ```
-4. Pull my published image or build the Docker image yourself:
+4. Pull the published image:
    ```bash
-   # Pull my published image
+   # Pull my published image. Alternatively, you can build the Docker image yourself.
    docker pull feiyuyu/free-dall-e-proxy
-   # Alternatively, you can build the Docker image yourself using the following command:
-   docker build -t free-dall-e-proxy .
    ```
 5. Run the Docker container:
    ```bash
    # if you set `Telegram` to True in the data/.env, it might require to login with your phone after running following commands.
    # after logining, you can press 'ctrl+p+q' to detach the container without stoping the container.
-   # if use my published image,run:
+   # run:
    docker run -it -p 8000:8000 -v $PWD/data:/app/data --name free-dall-e-proxy feiyuyu/free-dall-e-proxy
-   # if you build the image yourself,run:
-   docker run -it -p 8000:8000 -v $PWD/data:/app/data --name free-dall-e-proxy free-dall-e-proxy
 
    # if you only set `DISCORD` to True in the data/.env, you can run the following command instead:
    docker run -it -d -p 8000:8000 -v $PWD/data:/app/data --name free-dall-e-proxy feiyuyu/free-dall-e-proxy
-   # or (if you build the image yourself)
-   docker run -it -d -p 8000:8000 -v $PWD/data:/app/data --name free-dall-e-proxy free-dall-e-proxy
    ```
 
 The proxy service will now be running on port 8000 of your host machine.
