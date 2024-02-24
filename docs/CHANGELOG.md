@@ -1,4 +1,7 @@
 # Changelog
+### 2024-2-24 version="0.6.1"
+1. 持久化保存在webui中输入的api key
+
 ### 2024-2-23 version="0.6.0"
 1. 修复Discord无法得到coze bot响应的问题(注意！使用Discord用户账号登录程序，存在一定风险！后果自负！TG同理！)
 

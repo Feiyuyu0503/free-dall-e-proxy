@@ -59,25 +59,8 @@ footer_html = '''
                 </div>
               '''
 
-# 自定义 CSS
-custom_css = '''
-                footer {
-                    display: none !important;
-                }
-                #footer {
-                    text-align: center;
-                    position: fixed;
-                    left: 0;
-                    bottom: 10px;
-                    width: 100%;
-                }
-                #footer div {
-                    display: inline-block;
-                }
-             '''
-
 # 创建 Gradio Blocks 界面
-with gr.Blocks(css=custom_css) as demo:
+with gr.Blocks(css='webui/custom.css',js='webui/localStorage.js') as demo:
     gr.Markdown("# Text to Image")
     gr.Markdown("Enter some text and submit to generate an image.")
     with gr.Row():
