@@ -2,7 +2,7 @@ from fastapi import FastAPI,Request,Depends
 from fastapi.responses import JSONResponse
 from fastapi.responses import RedirectResponse
 import gradio as gr
-from gradio_ui import demo
+from webui.gradio_ui import demo
 import asyncio
 from pydantic import BaseModel, Field
 from typing import Optional

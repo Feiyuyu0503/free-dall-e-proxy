@@ -1,0 +1,13 @@
+footer {
+    display: none !important;
+}
+#footer {
+    text-align: center;
+    position: fixed;
+    left: 0;
+    bottom: 10px;
+    width: 100%;
+}
+#footer div {
+    display: inline-block;
+}
