@@ -1,6 +1,6 @@
 discord.py==1.7.3
 fastapi==0.109.1
-gradio==4.19.2
+gradio==4.37.1
 python-dotenv==1.0.0
 requests==2.31.0
 Telethon==1.33.1
