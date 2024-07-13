@@ -1,19 +1,28 @@
 // save api key to local storage
 function saveApiKeyToLocalStorage() {
-    if (localStorage.getItem('api_key')) {
-        let inputElem = document.querySelector('input[data-testid="password"]');
-        let event = new Event('input', {
-            bubbles: true,
-            cancelable: true,
-        });
-        inputElem.value = localStorage.getItem('api_key');
-        inputElem.dispatchEvent(event);
+    const apiKey = localStorage.getItem('api_key');
+    if (apiKey) {
+        const inputElem = document.querySelector('input[data-testid="password"]');
+        if (inputElem) {
+            const event = new InputEvent('input', {
+                bubbles: true,
+                cancelable: true,
+            });
+            setTimeout(() => {
+                inputElem.value = apiKey;
+                inputElem.dispatchEvent(event);
+            }, 0);
+        }
     }
-    document.getElementById("component-7").addEventListener("click", function() {
-        var api_key = document.querySelector('input[data-testid="password"]').value
-        if (api_key) {
-            localStorage.setItem('api_key', api_key);
+    document.getElementById("component-7").addEventListener("click", () => {
+        const inputElem = document.querySelector('input[data-testid="password"]');
+        if (inputElem) {
+            const apiKey = inputElem.value;
+            if (apiKey) {
+                localStorage.setItem('api_key', apiKey);
+            }
         }
     });
-  }
+}
+
   

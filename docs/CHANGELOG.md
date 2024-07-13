@@ -1,4 +1,7 @@
 # Changelog
+### 2024-7-13 version="0.6.4"
+1. 修复功能，持久化保存在webui中输入的api key
+
 ### 2024-7-13 version="0.6.3"
 1. 新增环境变量ADDITION_PROMPT，追加此提示文本至每条请求文本的最后
 2. 修复Discord获取图片url的方式
