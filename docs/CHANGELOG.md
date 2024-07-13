@@ -1,4 +1,8 @@
 # Changelog
+### 2024-7-13 version="0.6.5"
+1. 修复webui中的请求地址(如果是localhost则自动替换为请求127.0.0.1)
+2. 当discord的coze bot不遵循prompt时，等待10s，再尝试获取图片url
+
 ### 2024-7-13 version="0.6.4"
 1. 修复功能，持久化保存在webui中输入的api key
 
