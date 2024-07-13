@@ -7,7 +7,7 @@ from config import config
 current_task = None
 
 async def get_image_url(text,api_key,request:gr.Request):
-    base_url = request.headers.get("host")
+    base_url = request.headers.get("host").replace("localhost", "127.0.0.1")
     scheme = request.headers.get("x-forwarded-proto") or "http"
     global current_task
     # 向 FastAPI 后端发送 POST 请求，并获取图片 URL
