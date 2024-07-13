@@ -70,8 +70,8 @@ class DiscordBotClient(BotClient):
                         else:
                             raise Exception("No message content found")
                     else:
-                        await asyncio.sleep(5)
-                        msg = message.content
+                        await asyncio.sleep(10)
+                        msg = message.attachments[0].url if message.attachments else None
                         self.pending_responses[reply_to_msg_id] = (response_event, msg)
                 except Exception as e:
                     logger.error(f"Discord client handle response error: {e}")
