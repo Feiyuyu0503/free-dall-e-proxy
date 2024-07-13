@@ -55,7 +55,7 @@ class DiscordBotClient(BotClient):
         if reply_to_msg_id is not None and reply_to_msg_id in self.pending_responses:
             response_event, _ = self.pending_responses[reply_to_msg_id]
             try:
-                url = message.embeds[0].image.url if message.embeds and message.embeds[0].image else None
+                url = message.attachments[0].url if message.attachments else None
                 if url:
                     self.pending_responses[reply_to_msg_id] = (response_event, url)
                 else:
