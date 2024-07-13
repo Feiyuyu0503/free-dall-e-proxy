@@ -2,7 +2,7 @@
 FROM python:3.9-slim
 LABEL author="feiyuyu"
 LABEL email="admin@feiyuyu.net"
-LABEL version="0.6.2"
+LABEL version="0.6.3"
 
 # 设置工作目录为/app
 WORKDIR /app
