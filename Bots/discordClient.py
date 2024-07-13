@@ -32,7 +32,7 @@ class DiscordBotClient(BotClient):
             if channel is None:
                 raise ValueError(f"Discord Channel ID {self.channel_id} not found")
 
-            sent_msg = await channel.send(f"<@{self.dalle_bot}> "+text)
+            sent_msg = await channel.send(f"<@{self.dalle_bot}>"+' Please draw:'+text+'\n'+config.addition_prompt)
             msg_id = sent_msg.id
             # 为这个消息创建一个新的 Event 对象
             response_event = asyncio.Event()

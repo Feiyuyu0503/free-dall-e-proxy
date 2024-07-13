@@ -20,6 +20,9 @@ class Config:
     if Proxy:
         logger.info(f"Proxy: {Proxy} enabled.")
 
+    # 固定补充Prompt
+    addition_prompt = os.getenv('ADDITION_PROMPT') or ''
+
     # telegram
     TELEGRAM = os.getenv('TELEGRAM')
     API_ID = int(os.getenv('API_ID') or -1)

@@ -36,7 +36,7 @@ class TelegramBotClient(BotClient):
 
     async def send_message(self, text: str):
         try:
-            sent_msg = await self.client.send_message(self.group_id, self.bot_username+' '+text)
+            sent_msg = await self.client.send_message(self.group_id, self.bot_username+' Please draw:'+text+'\n'+config.addition_prompt)
             msg_id = sent_msg.id
              # 为这个消息创建一个新的 Event 对象
             response_event = asyncio.Event()
