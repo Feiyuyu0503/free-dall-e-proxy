@@ -71,7 +71,7 @@ async def dashboard(access_token: str = Cookie(None)):
             <p>Due to the high volume of requests we receive daily, we are compelled to impose certain restrictions. You can deploy it yourself to remove all the restrictions.</p>
             <p>As this is a free service, there is no SLA guarantee.</p>
             <p>Your api key is: {key}</p>
-            <p>You have {left_times} times left to use in every 2h.</p>
+            <p>You have {left_times} times left to use in every {config.reset_interval}h.</p>
             <p>You have requested {total_usage} times in total.</p>
             <p>Try it out:</p>
             <pre>
