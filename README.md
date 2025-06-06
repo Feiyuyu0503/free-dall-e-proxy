@@ -115,3 +115,4 @@ For any questions or issues regarding the deployment or usage of `free-dall-e-pr
 This project is open-source and intended solely for educational purposes. It must not be used for any illegal activities.
 
 ---
+[![Powered by DartNode](https://dartnode.com/branding/DN-Open-Source-sm.png)](https://dartnode.com "Powered by DartNode - Free VPS for Open Source")
